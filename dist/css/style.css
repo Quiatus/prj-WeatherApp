@@ -121,6 +121,34 @@ hr {
 }
 .searchBar .searchBar__form .searchBar__text {
   flex-grow: 1;
+  border: none;
+  margin-right: 0.25rem;
+  background-color: transparent;
+  color: #fff;
+  width: calc(100% - 52px);
+  font-size: 1.25rem;
+  padding: 0.75rem 0 0.75rem 0.75rem;
+  outline: none;
+}
+.searchBar .searchBar__form .searchBar__text::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+}
+.searchBar .searchBar__form .searchBar__button {
+  border: none;
+}
+.searchBar .searchBar__form .searchBar__button i {
+  font-size: 1.7rem;
+}
+.searchBar .searchBar__form .searchBar__button:hover,
+.searchBar .searchBar__form .searchBar__button:focus {
+  border: none;
+  box-shadow: none;
+  text-shadow: 4px 2px 5px #000;
+}
+.searchBar .searchBar__form:focus-within,
+.searchBar .searchBar__form:hover {
+  box-shadow: 4px 2px 5px #000;
 }
 
 /*# sourceMappingURL=style.css.map */
