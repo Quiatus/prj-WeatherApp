@@ -7,10 +7,15 @@ const initApp = () => {
     // add listeners
     const geoButton = document.getElementById("getLocation");
     geoButton.addEventListener("click", getGeoWeather);
+    const homeButton = document.getElementById("home");
+    homeButton.addEventListener("click", loadWeather);
 
     // set up
 
-    // default weather
+    // load weather
+
+    loadWeather();
+
 };
 
 document.addEventListener("DOMContentLoaded", initApp);
@@ -44,6 +49,15 @@ const geoSuccess = (position) => {
     };
 
     setLocationObject(currentLoc, myCoordsObj);
-    console.log(currentLoc);
+    updateDataAndDisplay(currentLoc);
+}
+
+const loadWeather = (event) => {
+    const savedLocation = getHomeLocation();
+}
+
+const updateDataAndDisplay = async (locationObj) => {
+    const weatherJson = await getWeatherFromCoords(locationObj);
+    if (weatherJson) updateDataAndDisplay(weatherJson, locationObj);
 }
 
