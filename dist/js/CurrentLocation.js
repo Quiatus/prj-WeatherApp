@@ -1,14 +1,14 @@
 export default class CurrentLocation {
-    #name;
-    #lat;
-    #lon;
-    #unit;
-    constructor() {
-        this.#name = "Current Location";
-        this.#lat = null;
-        this.#lon = null;
-        this.#unit = "metric";
-    }
+    #name = "Current Location";
+    #lat = null;
+    #lon = null;
+    #unit = "metric";
+    // constructor() {
+    //     this.#name = "Current Location";
+    //     this.#lat = null;
+    //     this.#lon = null;
+    //     this.#unit = "metric";
+    // }
 
     getName() {
         return this.#name;

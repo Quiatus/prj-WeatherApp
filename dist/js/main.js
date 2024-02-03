@@ -32,6 +32,7 @@ const getGeoWeather = (event) => {
             return geoError();
         }
 
+        // build in browser location
         navigator.geolocation.getCurrentPosition(geoSuccess, geoError)
     }
 };
@@ -41,6 +42,7 @@ const geoError = (errObj) => {
     displayError(errMsg, errMsg);
 };
 
+// passing browser location
 const geoSuccess = (position) => {
     const myCoordsObj = {
         lat: position.coords.latitude,
@@ -48,12 +50,13 @@ const geoSuccess = (position) => {
         name: `Lat: ${position.coords.latitude} Long: ${position.coords.longitude}`
     };
 
+    // passing instance of Current Location class, current location from browser
     setLocationObject(currentLoc, myCoordsObj);
-    updateDataAndDisplay(currentLoc);
+    //updateDataAndDisplay(currentLoc);
 }
 
 const loadWeather = (event) => {
-    const savedLocation = getHomeLocation();
+    //const savedLocation = getHomeLocation();
 }
 
 const updateDataAndDisplay = async (locationObj) => {
