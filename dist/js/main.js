@@ -1,7 +1,9 @@
 import { 
     setLocationObject, 
     getHomeLocation,
-    cleanText
+    cleanText, 
+    getCoordsFromApi,
+    getWeatherFromCoords
 } from "./dataFunctions.js"; 
 
 import { 
@@ -9,7 +11,8 @@ import {
     addSpinner,
     displayError, 
     displayApiError,
-    updateScreenReaderConfirmation 
+    updateScreenReaderConfirmation, 
+    updateDisplay
 } from "./domFunctions.js";
 
 import CurrentLocation from "./CurrentLocation.js";
@@ -144,19 +147,27 @@ const submitNewLocation = async (event) => {
     const locationIcon = document.querySelector(".fa-search");
     addSpinner(locationIcon);
     const coordsData = await getCoordsFromApi(entryText, currentLoc.getUnit());
-
-    if (coordsData.cod === 200) {
-        // success
-        const myCoordsObj = {};
-        setLocationObject(currentLoc, myCoordsObj);
-        updateDataAndDisplay(currentLoc);
+    if (coordsData) {
+        if (coordsData.cod === 200) {
+            // success
+            const myCoordsObj = {
+                lat: coordsData.coord.lat,
+                lon: coordsData.coord.lon,
+                name: coordsData.sys.country ? `${coordsData.name}, ${coordsData.sys.country}` : coordsData.name
+            };
+            setLocationObject(currentLoc, myCoordsObj);
+            updateDataAndDisplay(currentLoc);
+        } else {
+            displayApiError(coordsData);
+        }
     } else {
-        displayApiError(coordsData);
+        displayError("Connection Error", "Connection Error");
     }
-}
+
+};
 
 const updateDataAndDisplay = async (locationObj) => {
     const weatherJson = await getWeatherFromCoords(locationObj);
-    if (weatherJson) updateDataAndDisplay(weatherJson, locationObj);
+    if (weatherJson) updateDisplay(weatherJson, locationObj);
 };
 
