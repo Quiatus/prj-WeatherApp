@@ -9,3 +9,15 @@ export const setLocationObject = (locationObj, coordsObj) => {
         locationObj.setUnit(unit)
     }
 }
+
+// loads current location from the local browser storage
+export const getHomeLocation = () => {
+    return localStorage.getItem("defaultWeatherLocation")
+}
+
+// uses regex to search for 2 spaces next to each other and removes them 
+export const cleanText = (text) => {
+    const regex = / {2,}/g;
+    const entryText = text.replaceAll(regex, " ").trim();
+    return entryText;
+}
