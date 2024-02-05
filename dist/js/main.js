@@ -69,12 +69,12 @@ const geoSuccess = (position) => {
     const myCoordsObj = {
         lat: position.coords.latitude,
         lon: position.coords.longitude,
-        name: `Lat: ${position.coords.latitude} Long: ${position.coords.longitude}`
+        name: `Lat:${position.coords.latitude} Long:${position.coords.longitude}`
     };
 
     // passing instance of Current Location class, current location from browser
     setLocationObject(currentLoc, myCoordsObj);
-    //updateDataAndDisplay(currentLoc);
+    updateDataAndDisplay(currentLoc);
 };
 
 // loads weather based on user action

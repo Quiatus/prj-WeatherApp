@@ -35,7 +35,18 @@ const toProperCase = (text) => {
 
 const updateWeatherLocationHeader = (message) => {
     const h1 = document.getElementById("currentForecast__location");
-    h1.textContent = message;
+    if (message.indexOf("Lat:") !== -1 && message.indexOf("Long:") !== -1 ) {
+        const msgArray = message.split(" ");
+        const mapArray = msgArray.map((msg) => {
+            return msg.replace(":", ": ");
+        });
+        const lat = mapArray[0].indexOf("-") === -1 ? mapArray[0].slice(0, 10) : mapArray[0].slice(0, 11);
+        const lon = mapArray[1].indexOf("-") === -1 ? mapArray[1].slice(0, 11) : mapArray[1].slice(0, 12);
+        h1.textContent = `${lat} • ${lon}`;
+    } else {
+        h1.textContent = message;
+    }
+    
 };
 
 export const updateScreenReaderConfirmation = (message) => {
@@ -54,10 +65,11 @@ export const updateDisplay = (weatherJson, locationObj) => {
 
     // current conditions
     const ccArray = createCurrentConditionDivs(weatherJson, locationObj.getUnit());
+    displayCurrentConditions(ccArray);
+
     // six day forecast
 
     setFocusOnSearch();
-
     fadeDisplay();
 };
 
@@ -132,14 +144,102 @@ const createCurrentConditionDivs = (weatherObj, unit) => {
     const tempUnit = unit === 'imperial' ? "F" : "C";
     const windUnit = unit === 'imperial' ? "mph" : "m/s";
     const icon = createMainImgDiv(weatherObj.current.weather[0].icon, weatherObj.current.weather[0].description);
+    const temp = createElem("div", "temp", `${Math.round(Number(weatherObj.current.temp))}°`, tempUnit);
+    const properDesc = toProperCase(weatherObj.current.weather[0].description);
+    const desc = createElem("div", "desc", properDesc);
+    const feels = createElem("div", "feels", `Feels like ${Math.round(Number(weatherObj.current.feels_like))}°`);
+    const maxTemp = createElem("div", "maxtemp", `High ${Math.round(Number(weatherObj.daily[0].temp.max))}°`);
+    const minTemp = createElem("div", "mintemp", `Low ${Math.round(Number(weatherObj.daily[0].temp.min))}°`);
+    const humidity = createElem("div", "humidity", `Humidity ${weatherObj.current.humidity}%`);
+    const wind = createElem("div", "wind", `Wind ${Math.round(Number(weatherObj.current.wind_speed))} ${windUnit}`);
+    return [icon, temp, desc, feels, maxTemp, minTemp, humidity, wind];
 }; 
+
 
 const createMainImgDiv = (icon, altText) => {
     const iconDiv = createElem("div", icon);
-    iconDiv.id = "icon";
+    iconDiv.className = "icon";
     const faIcon = translateIconToFA(icon);
     faIcon.ariaHidden = true;
     faIcon.title = altText;
     iconDiv.appendChild(faIcon);
     return iconDiv;
+};
+
+const createElem = (elemType, divClassName, divText, unit) => {
+    const div = document.createElement(elemType);
+    div.className = divClassName;
+
+    if (divText) {
+        div.textContent = divText;
+    }
+
+    if (divClassName === "temp") {
+        const unitDiv = document.createElement("div");
+        unitDiv.classList.add("unit");
+        unitDiv.textContent = unit;
+        div.appendChild(unitDiv);
+    }
+
+    return div;
+};
+
+const translateIconToFA = (icon) => {
+    const i = document.createElement("i");
+    const firstTwoChar = icon.slice(0,2);
+    const lastChar = icon.slice(2);
+
+    switch (firstTwoChar) {
+        case "01":
+            if (lastChar === "d") {
+                i.classList.add("far", "fa-sun");
+            } else {
+                i.classList.add("far", "fa-moon");
+            }
+            break;
+        case "02":
+            if (lastChar === "d") {
+                i.classList.add("fas", "fa-cloud-sun");
+            } else {
+                i.classList.add("fas", "fa-cloud-moon");
+            }
+            break;
+        case "03":
+            i.classList.add("fas", "fa-cloud");
+            break;
+        case "04":
+            i.classList.add("fas", "fa-cloud-meatball");
+            break;
+        case "09":
+            i.classList.add("fas", "fa-cloud-rain");
+            break;
+        case "10":
+            if (lastChar === "d") {
+                i.classList.add("fas", "fa-cloud-sun-rain");
+            } else {
+                i.classList.add("fas", "fa-cloud-moon-rain");
+            }
+            break;
+        case "11":
+            i.classList.add("fas", "fa-poo-storm");
+            break;
+        case "13":
+            i.classList.add("far", "fa-snowflake");
+            break;
+        case "50":
+            i.classList.add("far", "fa-smog");
+            break;
+        case "50":
+            i.classList.add("far", "fa-question-circle");
+            break;
+    }
+
+    return i;
+};
+
+const displayCurrentConditions = (ccArray) => {
+    const ccContainer = document.getElementById("currentForecast__conditions");
+    ccArray.forEach( cc => {
+        ccContainer.appendChild(cc);
+    });
 }
