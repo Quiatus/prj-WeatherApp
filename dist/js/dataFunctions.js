@@ -1,5 +1,3 @@
-const WEATHER_API_KEY = "";
-
 // locationObj is an instance of class Current Locaton. coordsObj passes teh current location passed from main function
 export const setLocationObject = (locationObj, coordsObj) => {
     // Destructuring assignment 
@@ -68,12 +66,12 @@ export const getCoordsFromApi = async (entryText, units) => {
     //     console.error(err.stack);
     // }
 
-    // const urlDataObj = {
-    //     text: entryText,
-    //     units: units
-    // };
-
     // SERVERLESS
+
+    const urlDataObj = {
+        text: entryText,
+        units: units
+    };
 
     try {
         const DataStream = await fetch('./.netlify/functions/get_coords', {
