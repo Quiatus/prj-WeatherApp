@@ -1,4 +1,4 @@
-const WEATHER_API_KEY = "5deae395ce8e574bb065123efbef16e0";
+const WEATHER_API_KEY = "";
 
 // locationObj is an instance of class Current Locaton. coordsObj passes teh current location passed from main function
 export const setLocationObject = (locationObj, coordsObj) => {
