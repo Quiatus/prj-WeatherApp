@@ -270,7 +270,6 @@ const getDayAbbr = (data) => {
 
 const createDailyForecastIcon = (icon, altText) => {
     const img = document.createElement('img');
-    console.log(icon);
     if (window.innerWidth < 768 || window.innerHeight < 1025) {
         img.src = `https://openweathermap.org/img/wn/${icon}.png`
     } else {
